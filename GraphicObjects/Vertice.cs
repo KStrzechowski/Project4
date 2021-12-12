@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project4.GraphicObjects.Figures
+namespace Project4.GraphicObjects
 {
     public class Vertice : IGraphicObject
     {

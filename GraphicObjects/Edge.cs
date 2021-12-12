@@ -9,34 +9,38 @@ namespace Project4.GraphicObjects
 {
     public class Edge : IGraphicObject
     {
-        public Edge()
+        public Vertice _firstVertice;
+        public Vertice _secondVertice;
+        public bool Selected { get; set; }
+        public Graphics Graphic { get; set; }
+        public Edge(Vertice first, Vertice second)
         {
-
+            _firstVertice = first;
+            _secondVertice = second;
         }
 
-        public bool CheckIfClicked(Point point)
+        public double GetLength() => Helpful.GetDistance(_firstVertice.Location, _secondVertice.Location)));
+
+        public bool CheckIfClicked(Point position)
         {
-            throw new NotImplementedException();
+            if (GetLength() + 3 >= (Helpful.GetDistance(_firstVertice.Location, position)
+                + Helpful.GetDistance(_secondVertice.Location, position)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void Draw()
-        {
-            throw new NotImplementedException();
-        }
+        public void Draw() =>
+            Helpful.DrawLine(Graphic, Color.Black, _firstVertice.Location, _secondVertice.Location);
 
         public void Move(Point startingPoint, Point endingPoint)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Select()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UnSelect()
-        {
-            throw new NotImplementedException();
+            _firstVertice.Move(startingPoint, endingPoint);
+            _secondVertice.Move(startingPoint, endingPoint);
         }
     }
 }
