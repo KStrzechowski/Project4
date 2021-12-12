@@ -22,6 +22,9 @@ namespace Project4.GraphicObjects
             Math.Floor((Math.Sqrt(Math.Pow(first.X - second.X, 2) +
             Math.Pow(first.Y - second.Y, 2))));
 
+        public static void DrawPoint(Graphics graphics, Color color, Point point, int radius) =>
+            graphics.FillEllipse(new SolidBrush(color), point.X - radius, point.Y - radius, radius * 2, radius * 2);
+
         public static void DrawLine(Graphics graphics, Color color, Point first, Point second) =>
             graphics.DrawLine(new Pen(new SolidBrush(color)), first, second);
     }
