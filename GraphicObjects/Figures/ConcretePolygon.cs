@@ -10,7 +10,6 @@ namespace Project4.GraphicObjects.Figures
     {
         public ConcretePolygon() : base()
         {
-
         }
     }
 }

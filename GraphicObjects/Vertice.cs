@@ -11,25 +11,32 @@ namespace Project4.GraphicObjects
     {
         public Point Location { get; set; }
         public bool Selected { get; set; }
-        public Graphics Graphic { get; set; }
+        public Graphics Graphics { get; set; }
+        public Color Color { get; set; }
 
         public Vertice(Point location)
         {
             Location = location;
+            this.Color = Color.Orange;
         }
 
         public bool CheckIfClicked(Point point)
         {
-            throw new NotImplementedException();
+            if ((Math.Pow(Location.X - point.X, 2) + Math.Pow(Location.Y - point.Y, 2)) < 50)
+                return true;
+            else
+                return false;
         }
 
         public void Draw()
         {
             int radius = 5;
+            Color color = Selected ? Color.Blue : this.Color;
+            
             if (Selected)
-                Helpful.DrawPoint(Graphic, Color.Black, Location, radius);
+                Helpful.DrawPoint(this.Graphics, color, Location, radius);
             else
-                Helpful.DrawPoint(Graphic, Color.Orange, Location, radius);
+                Helpful.DrawPoint(this.Graphics, color, Location, radius);
         }
 
         public void Move(Point startingPoint, Point endingPoint)

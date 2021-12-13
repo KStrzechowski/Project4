@@ -11,7 +11,8 @@ namespace Project4.GraphicObjects
     {
         void Draw();
         bool Selected { get; set; }
-        Graphics Graphic { get; set; }
+        Graphics Graphics { get; set; }
+        Color Color { get; set; }
         public void Move(Point startingPoint, Point endingPoint);
         public bool CheckIfClicked(Point point);
     }
