@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project4.Math
+namespace Project4.Data.Structures
 {
     public class Matrix
     {

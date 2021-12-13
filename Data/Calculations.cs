@@ -5,8 +5,9 @@ using System.Windows;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using Project4.Data.Structures;
 
-namespace Project4.Math
+namespace Project4.Data
 {
     public static class Calculations
     {

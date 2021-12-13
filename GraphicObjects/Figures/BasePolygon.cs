@@ -62,5 +62,11 @@ namespace Project4.GraphicObjects.Figures
                 vertice.Move(startingPoint, endingPoint);
             }
         }
+
+        public virtual void AddVertice(Vertice vertice)
+        {
+            _vertices.Add(vertice);
+            vertice.Graphics = Graphics;
+        }
     }
 }
