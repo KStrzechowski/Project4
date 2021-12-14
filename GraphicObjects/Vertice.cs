@@ -11,11 +11,12 @@ namespace Project4.GraphicObjects
     {
         public Point Location { get; set; }
         public bool Selected { get; set; }
-        public Graphics Graphics { get; set; }
+        public Graphics Graphics { get; private set; }
         public Color Color { get; set; }
 
-        public Vertice(Point location)
+        public Vertice(Point location, Graphics graphics)
         {
+            this.Graphics = graphics;
             Location = location;
             this.Color = Color.Orange;
         }
@@ -45,5 +46,7 @@ namespace Project4.GraphicObjects
                 endingPoint.Y + (Location.Y - startingPoint.Y));
             Location = position;
         }
+
+        public void SetGraphics(Graphics graphics) => Graphics = graphics;
     }
 }

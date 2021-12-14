@@ -12,10 +12,11 @@ namespace Project4.GraphicObjects
         public Vertice _firstVertice;
         public Vertice _secondVertice;
         public bool Selected { get; set; }
-        public Graphics Graphics { get; set; }
+        public Graphics Graphics { get; private set; }
         public Color Color { get; set; }
-        public Edge(Vertice first, Vertice second)
+        public Edge(Vertice first, Vertice second, Graphics graphics)
         {
+            this.Graphics = graphics;
             _firstVertice = first;
             _secondVertice = second;
             this.Color = Color.Black;
@@ -39,5 +40,7 @@ namespace Project4.GraphicObjects
             _firstVertice.Move(startingPoint, endingPoint);
             _secondVertice.Move(startingPoint, endingPoint);
         }
+
+        public void SetGraphics(Graphics graphics) => Graphics = graphics;
     }
 }
