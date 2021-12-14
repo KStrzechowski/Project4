@@ -31,9 +31,10 @@ namespace Project4
         {
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.optionsTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.createPolygonButton = new System.Windows.Forms.Button();
+            this.createCuboidButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
-            this.createButton = new System.Windows.Forms.Button();
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.mainTableLayoutPanel.SuspendLayout();
             this.optionsTableLayoutPanel.SuspendLayout();
@@ -60,9 +61,10 @@ namespace Project4
             this.optionsTableLayoutPanel.ColumnCount = 2;
             this.optionsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.optionsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.optionsTableLayoutPanel.Controls.Add(this.createPolygonButton, 1, 2);
+            this.optionsTableLayoutPanel.Controls.Add(this.createCuboidButton, 0, 2);
             this.optionsTableLayoutPanel.Controls.Add(this.addButton, 1, 3);
             this.optionsTableLayoutPanel.Controls.Add(this.deleteButton, 0, 3);
-            this.optionsTableLayoutPanel.Controls.Add(this.createButton, 1, 2);
             this.optionsTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.optionsTableLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.optionsTableLayoutPanel.Name = "optionsTableLayoutPanel";
@@ -71,8 +73,29 @@ namespace Project4
             this.optionsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.optionsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.optionsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.optionsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.optionsTableLayoutPanel.Size = new System.Drawing.Size(190, 555);
             this.optionsTableLayoutPanel.TabIndex = 0;
+            // 
+            // createPolygonButton
+            // 
+            this.createPolygonButton.Location = new System.Drawing.Point(98, 279);
+            this.createPolygonButton.Name = "createPolygonButton";
+            this.createPolygonButton.Size = new System.Drawing.Size(89, 64);
+            this.createPolygonButton.TabIndex = 2;
+            this.createPolygonButton.Text = "Create Polygon";
+            this.createPolygonButton.UseVisualStyleBackColor = true;
+            this.createPolygonButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.createPolygonButton_MouseDown);
+            // 
+            // createCuboidButton
+            // 
+            this.createCuboidButton.Location = new System.Drawing.Point(3, 279);
+            this.createCuboidButton.Name = "createCuboidButton";
+            this.createCuboidButton.Size = new System.Drawing.Size(89, 64);
+            this.createCuboidButton.TabIndex = 3;
+            this.createCuboidButton.Text = "Create Cuboid";
+            this.createCuboidButton.UseVisualStyleBackColor = true;
+            this.createCuboidButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.createCuboidButton_MouseDown);
             // 
             // addButton
             // 
@@ -94,26 +117,20 @@ namespace Project4
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.deleteButton_MouseDown);
             // 
-            // createButton
-            // 
-            this.createButton.Location = new System.Drawing.Point(98, 279);
-            this.createButton.Name = "createButton";
-            this.createButton.Size = new System.Drawing.Size(89, 64);
-            this.createButton.TabIndex = 2;
-            this.createButton.Text = "Create Polygon";
-            this.createButton.UseVisualStyleBackColor = true;
-            this.createButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.createButton_MouseDown);
-            // 
             // mainPictureBox
             // 
+            this.mainPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mainPictureBox.BackColor = System.Drawing.Color.White;
-            this.mainPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPictureBox.Location = new System.Drawing.Point(199, 3);
             this.mainPictureBox.Name = "mainPictureBox";
             this.mainPictureBox.Size = new System.Drawing.Size(782, 555);
             this.mainPictureBox.TabIndex = 1;
             this.mainPictureBox.TabStop = false;
             this.mainPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseDown);
+            this.mainPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseMove);
+            this.mainPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseUp);
             // 
             // mainForm
             // 
@@ -137,7 +154,8 @@ namespace Project4
         private System.Windows.Forms.PictureBox mainPictureBox;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button deleteButton;
-        private System.Windows.Forms.Button createButton;
+        private System.Windows.Forms.Button createPolygonButton;
+        private System.Windows.Forms.Button createCuboidButton;
     }
 }
 
