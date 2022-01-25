@@ -11,12 +11,7 @@ namespace Project4.GraphicObjects
     public interface IGraphicObject
     {
         void Draw();
-        bool Selected { get; set; }
-        Graphics Graphics { get; }
         Color Color { get; set; }
-        public void Move(Point startingPoint, Point endingPoint);
-        public bool CheckIfClicked(Point point);
-        public void SetGraphics(Graphics graphics);
     }
 
     public static class Helpful

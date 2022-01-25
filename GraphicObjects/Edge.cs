@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace Project4.GraphicObjects
 {
-    public class Edge : IGraphicObject
+    public class Edge : BaseGraphicObject
     {
         public Vertice _firstVertice;
         public Vertice _secondVertice;
         public bool Selected { get; set; }
-        public Graphics Graphics { get; private set; }
-        public Color Color { get; set; }
-        public Edge(Vertice first, Vertice second, Graphics graphics)
+        public Edge(Vertice first, Vertice second)
         {
-            this.Graphics = graphics;
             _firstVertice = first;
             _secondVertice = second;
             this.Color = Color.Black;
@@ -24,22 +21,7 @@ namespace Project4.GraphicObjects
 
         public double GetLength() => Helpful.GetDistance(_firstVertice.Location, _secondVertice.Location);
 
-        public bool CheckIfClicked(Point position)
-        {
-            if (GetLength() + 3 >= (Helpful.GetDistance(_firstVertice.Location, position)
-                + Helpful.GetDistance(_secondVertice.Location, position)))
-                return true;
-            else
-                return false;
-        }
-
-        public void Draw() => Helpful.DrawLine(this.Graphics, this.Color, _firstVertice.Location, _secondVertice.Location);
-
-        public void Move(Point startingPoint, Point endingPoint)
-        {
-            _firstVertice.Move(startingPoint, endingPoint);
-            _secondVertice.Move(startingPoint, endingPoint);
-        }
+        public override void Draw() => Helpful.DrawLine(Graphics, this.Color, _firstVertice.Location, _secondVertice.Location);
 
         public void SetGraphics(Graphics graphics) => Graphics = graphics;
     }
