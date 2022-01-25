@@ -8,10 +8,8 @@ namespace Project4.GraphicObjects.Enums
 {
     public enum State
     {
-        Default = -1,
-        NewFigure,
-        NewCuboid,
-        Move,
-        Selected,
+        FirstCamera,
+        SecondCamera,
+        ThirdCamera,
     }
 }
