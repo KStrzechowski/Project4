@@ -1,6 +1,7 @@
-﻿using Project4.GraphicObjects;
+﻿using Project4.Data;
+using Project4.Data.Structures;
+using Project4.GraphicObjects;
 using Project4.GraphicObjects.Enums;
-using Project4.GraphicObjects.Figures;
 using Project4.GraphicObjects.Objects3D;
 using System;
 using System.Collections.Generic;
@@ -16,196 +17,165 @@ namespace Project4
 {
     public partial class mainForm : Form
     {
-        private readonly List<BasePolygon> _polygons = new List<BasePolygon>();
-        private readonly List<BaseCuboid> _cuboids = new List<BaseCuboid>();
-        private BasePolygon _selectedPolygon;
-        private BaseCuboid _selectedCuboid;
-        private State _currentState;
-        private Graphics _graphics;
-        private Point _position;
+        private List<BaseObject3D> _objects3D = new();
+        private List<bool> _objectsState = new();
+        private Camera _currentCamera;
+        private Camera _camera1;
+        private Camera _camera2;
+        private Camera _camera3;
+        private bool[] _cameraStates = new bool[3];
+        private State _state;
+
+
         public mainForm()
         {
             InitializeComponent();
-            _graphics = mainPictureBox.CreateGraphics();
+            SetBitmap();
+            initializeCameras();
+            initializeObjects();
         }
 
-        private void addButton_MouseDown(object sender, MouseEventArgs e)
+        private void initializeCameras()
         {
-            switch (_currentState)
-            {
-                case State.NewFigure:
-                    {
-                        if (_selectedPolygon != null)
-                        {
-                            _polygons.Add(_selectedPolygon);
-                            _selectedPolygon = null;
-                            _currentState = State.Default;
-                        }
-                        break;
-                    }
-                case State.NewCuboid:
-                    {
-                        if (_selectedCuboid != null)
-                        {
-                            _cuboids.Add(_selectedCuboid);
-                            _selectedCuboid = null;
-                            _currentState = State.Default;
-                        }
-                        break;
-                    }
-            }
-            DrawAllShapes();
+            CustomVector vector1 = new CustomVector(new double[] { 0, 0, 0 });
+            CustomVector vector2 = new CustomVector(new double[] { 1, 0, 0 });
+            _camera1 = new Camera(vector1, vector2);
+
+            vector1 = new CustomVector(new double[] { 0, 0, 80 });
+            vector2 = new CustomVector(new double[] { 20, 0, 0 });
+            _camera2 = new Camera(vector1, vector2);
+
+            vector1 = new CustomVector(new double[] { 0, 50, 0 });
+            vector2 = new CustomVector(new double[] { 30, 0, 0 });
+            _camera3 = new Camera(vector1, vector2);
+
+            _state = State.FirstCamera;
+            _currentCamera = _camera1;
         }
 
-        private void deleteButton_MouseDown(object sender, MouseEventArgs e)
+        private void initializeObjects()
         {
-            if (_selectedPolygon != null)
-                _polygons.Remove(_selectedPolygon);
+            _objects3D.Add(new Diamond(_currentCamera, new CustomVector( new double[]{ 40, 0, 0, 1 }), 5));
+            _objectsState.Add(true);
 
-            if (_selectedCuboid != null)
-                _cuboids.Remove(_selectedCuboid);
+            _objects3D.Add(new Diamond(_currentCamera, new CustomVector(new double[] { 80, 15, -5 }), 3));
+            _objectsState.Add(true);
 
-            _selectedPolygon = null;
-            _selectedCuboid = null;
-            _currentState = State.Default;
+            _objects3D.Add(new Diamond(_currentCamera, new CustomVector(new double[] { 30, -15, 7 }), 1));
+            _objectsState.Add(true);
         }
 
-        private void createPolygonButton_MouseDown(object sender, MouseEventArgs e)
+        private void SetBitmap()
         {
-            _selectedPolygon = new ConcretePolygon(_graphics);
-            _currentState = State.NewFigure;
-        }
-
-        private void createCuboidButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            _selectedCuboid = new ConcreteCuboid(_graphics);
-            _currentState = State.NewCuboid;
-        }
-
-        private void mainPictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            var _position = new Point(e.X, e.Y);
-            switch (_currentState)
-            {
-                case State.Default:
-                    {
-                        SelectObject(_position);
-                        break;
-                    }
-                case State.NewFigure:
-                    {
-                        if (_selectedPolygon != null)
-                        {
-                            var vertice = new Vertice(_position, _graphics);
-                            _selectedPolygon.AddVertice(vertice);
-                        }
-                        break;
-                    }
-                case State.NewCuboid:
-                    {
-                        if (_selectedCuboid != null)
-                        {
-                            var vertice = new Vertice(_position, _graphics);
-                            _selectedCuboid.AddVertice(vertice);
-                        }
-                        break;
-                    }
-            }
-
-            if (_currentState != State.Default)
-                DrawAllShapes();
-        }
-
-        private void mainPictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            var position = new Point(e.X, e.Y);
-            switch (_currentState)
-            {
-                case State.Move:
-                    {
-                        if (_selectedCuboid != null)
-                        {
-                            _selectedCuboid.Move(_position, position);
-                        }
-                        else if (_selectedPolygon != null)
-                        {
-                            _selectedPolygon.Move(_position, position);
-                        }
-                        DrawAllShapes();
-                        break;
-                    }
-            }
-            _position = position;
-        }
-
-        private void mainPictureBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            switch (_currentState)
-            {
-                case State.Move:
-                    {
-                        _currentState = State.Default;
-                        _selectedCuboid = null;
-                        _selectedPolygon = null;
-                        break;
-                    }
-            }
-        }
-
-        private void SelectObject(Point position)
-        {
-            foreach (var cuboid in _cuboids)
-            {
-                if (cuboid.CheckIfClicked(position))
-                {
-                    _selectedCuboid = cuboid;
-                    _currentState = State.Move;
-                    return;
-                }
-            }
-
-            foreach (var polygon in _polygons)
-            {
-                if (polygon.CheckIfClicked(position))
-                {
-                    _selectedPolygon = polygon;
-                    _currentState = State.Move;
-                    return;
-                }
-            }
-        }
-
-        private void SetGraphics()
-        {
-            _graphics = mainPictureBox.CreateGraphics();
-            foreach (var polygon in _polygons)
-                polygon.SetGraphics(_graphics);
-
-            foreach (var cuboid in _cuboids)
-                cuboid.SetGraphics(_graphics);
-
-            if (_selectedPolygon != null)
-                _selectedPolygon.SetGraphics(_graphics);
-
-            if (_selectedCuboid != null)
-                _selectedCuboid.SetGraphics(_graphics);
+            mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+            BaseGraphicObject.Bitmap = (Bitmap)mainPictureBox.Image;
+            BaseGraphicObject.Graphics = Graphics.FromImage(mainPictureBox.Image);
         }
 
         private void DrawAllShapes()
         {
-            SetGraphics();
-            _graphics.Clear(Color.White);
-            foreach (var polygon in _polygons)
-                polygon.Draw();
+            SetBitmap();
+            foreach (var object3D in _objects3D)
+                object3D.Draw();
+        }
 
-            foreach (var cuboid in _cuboids)
-                cuboid.Draw();
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            MoveCamera();
+            MoveObjects();
+            DrawAllShapes();
+        }
 
-            if (_selectedPolygon != null)
-                _selectedPolygon.Draw();
+        private void MoveObjects()
+        {
+            CustomVector vector;
+            var diamond = _objects3D[0];
+            if (diamond.points[0][0] >= 80)
+                _objectsState[0] = false;
+            else if (diamond.points[0][0] <= 20)
+                _objectsState[0] = true;
 
-            if (_selectedCuboid != null)
-                _selectedCuboid.Draw();
+            if (_objectsState[0])
+                vector = new CustomVector(new double[] { 0.1, 0, 0 });
+            else
+                vector = new CustomVector(new double[] { -0.1, 0, 0 });
+            diamond.Translation(vector);
+            diamond.RotateX(0.01);
+        }
+
+        private void MoveCamera()
+        {
+            switch (_state)
+            {
+                case State.SecondCamera:
+                    {
+                        MoveSecondCamera();
+                        break;
+                    }
+                case State.ThirdCamera:
+                    {
+                        MoveThirdCamera();
+                        break;
+                    }
+            }
+        }
+
+        private void MoveSecondCamera()
+        {
+            _currentCamera = _camera2;
+            if (_currentCamera.Position[2] >= 120)
+                _cameraStates[1] = true;
+            else if (_currentCamera.Position[2] <= 15)
+                _cameraStates[1] = false;
+
+            if (!_cameraStates[1])
+                _camera2.ChangePosition(new CustomVector(new double[] 
+                { _currentCamera.Position[0], _currentCamera.Position[1], _currentCamera.Position[2] + 0.1 }));
+            else
+                _camera2.ChangePosition(new CustomVector(new double[] 
+                { _currentCamera.Position[0], _currentCamera.Position[1], _currentCamera.Position[2] - 0.1 }));
+            
+            SetNewCamera(_camera2);
+        }
+
+        private void MoveThirdCamera()
+        {
+            _currentCamera = _camera3;
+
+            var diamond = _objects3D[0];
+            _camera3.ChangeTarget(diamond.center);
+            SetNewCamera(_camera3);
+        }
+
+        private void SetNewCamera(Camera camera)
+        {
+            _currentCamera = camera;
+            foreach (var object3D in _objects3D)
+                object3D.ChangeCamera(_currentCamera);
+        }
+
+        private void SetState(State state)
+        {
+            _state = state;
+        }
+
+        private void mainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.D1 && _state != State.FirstCamera)
+            {
+                SetNewCamera(_camera1);
+                SetState(State.FirstCamera);
+            }
+            else if (e.KeyCode == Keys.D2 && _state != State.SecondCamera)
+            {
+                SetNewCamera(_camera2);
+                SetState(State.SecondCamera);
+            }
+            else if (e.KeyCode == Keys.D3 && _state != State.ThirdCamera)
+            {
+                SetNewCamera(_camera3);
+                SetState(State.ThirdCamera);
+            }
         }
     }
 }
