@@ -105,8 +105,7 @@ namespace Project4.GraphicObjects.Objects3D
         {
             for (int i = 0; i < points.Length; i++)
             {
-                var newPoint =  ProjMatrix * (ViewMatrix * (ModelMatrix * points[i]));
-                points[i] = newPoint;
+                points[i] =  ProjMatrix * (ViewMatrix * (/*ModelMatrix * */points[i]));
             }
         }
 
@@ -141,8 +140,8 @@ namespace Project4.GraphicObjects.Objects3D
         {
             var result = triangle;
             for (int i = 0; i < 3; i++)
-            {
-                var newPoint = result[i];
+            { 
+                var newPoint = triangle[i];
                 for (int j = 0; j < 4; j++)
                     if (newPoint[3] != 0)
                         newPoint[j] /= newPoint[3];
