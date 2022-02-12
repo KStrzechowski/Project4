@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using Project4.Data.Structures;
+using Project4.GraphicObjects;
 
 namespace Project4.Data
 {
     public static class Calculations
     {
-        public static Matrix Multiply(Matrix firstMatrix, Matrix secondMatrix)
+       /* public static Matrix Multiply(Matrix firstMatrix, Matrix secondMatrix)
         {
             if (firstMatrix.Values.GetLength(1) != secondMatrix.Values.GetLength(0))
                 throw new ArgumentException();
@@ -59,7 +60,7 @@ namespace Project4.Data
                 throw new ArgumentException();
 
             return Multiply(horizontalVector.Values, verticalVector.Values);
-        }
+        }*/
 
         public static double Multiply(double[] horizontal, double[] vertical)
         {
@@ -76,6 +77,34 @@ namespace Project4.Data
             vector[1] = vector1[2] * vector2[0] - vector1[0] * vector2[2];
             vector[2] = vector1[0] * vector2[1] - vector1[1] * vector2[0];
             return vector;
+        }
+
+        public static CustomVector NormalVectorFromTriangle(Triangle triangle)
+        {
+            var U = new CustomVector(new double[] { triangle[1][0] - triangle[0][0], triangle[1][1] - triangle[0][1], triangle[1][2] - triangle[0][2] });
+            var V = new CustomVector(new double[] { triangle[2][0] - triangle[0][0], triangle[2][1] - triangle[0][1], triangle[2][2] - triangle[0][2] });
+
+            var Normal = new CustomVector(new double[]
+            {
+                U[1] * V[2] - U[2] * V[1],
+                U[2] * V[0] - U[0] * V[2],
+                U[0] * V[1] - U[1] * V[0],
+            });
+
+            var l = Math.Sqrt(
+                Normal[0] * Normal[0] +
+                Normal[1] * Normal[1] +
+                Normal[2] * Normal[2]
+            );
+
+            if (l != 0)
+            {
+                Normal[0] = Normal[0] / l;
+                Normal[1] = Normal[1] / l;
+                Normal[2] = Normal[2] / l;
+            }
+
+            return Normal;
         }
     }
 }
