@@ -11,7 +11,11 @@ namespace Project4.GraphicObjects
     {
         public static Graphics Graphics { get; set; }
         public static Bitmap Bitmap { get; set; }
-        public Color color = Color.Black;
+        public static int ScreenWidth { get; set; }
+        public static int ScreenHeight { get; set; }
+        public static double[,] ZBuffor { get; set; }
+
+        private Color color = Color.Black;
         public Color Color { get => color; set => color = value; }
         public abstract void Draw();
     }
