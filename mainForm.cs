@@ -26,10 +26,10 @@ namespace Project4
         private bool[] _cameraStates = new bool[3];
         private State _state;
 
-
         public mainForm()
         {
             InitializeComponent();
+
             SetBitmap();
             initializeCameras();
             initializeObjects();
@@ -38,11 +38,11 @@ namespace Project4
         private void initializeCameras()
         {
             CustomVector vector1 = new CustomVector(new double[] { 0, 0, 0 });
-            CustomVector vector2 = new CustomVector(new double[] { 1, 0, 0 });
+            CustomVector vector2 = new CustomVector(new double[] { 0, 0, 1 });
             _camera1 = new Camera(vector1, vector2);
 
-            vector1 = new CustomVector(new double[] { 0, 0, 80 });
-            vector2 = new CustomVector(new double[] { 20, 0, 0 });
+            vector1 = new CustomVector(new double[] { 80, 0, 0 });
+            vector2 = new CustomVector(new double[] { 0, 0, 20 });
             _camera2 = new Camera(vector1, vector2);
 
             vector1 = new CustomVector(new double[] { 0, 50, 0 });
@@ -55,13 +55,15 @@ namespace Project4
 
         private void initializeObjects()
         {
-            _objects3D.Add(new Diamond(_currentCamera, new CustomVector( new double[]{ 40, 0, 0, 1 }), 5));
+            //_objects3D.Add(new Diamond(_currentCamera, new CustomVector( new double[]{ 0, 0, 40, 1 }), 5));
+            //_objectsState.Add(true);
+            _objects3D.Add(new Sphere(_currentCamera, new CustomVector(new double[] { 0, 0, 40, 1 }), 5));
             _objectsState.Add(true);
 
-            _objects3D.Add(new Diamond(_currentCamera, new CustomVector(new double[] { 80, 15, -5 }), 3));
+            _objects3D.Add(new Diamond(_currentCamera, new CustomVector(new double[] { -5, 15, 180, 1 }), 5));
             _objectsState.Add(true);
 
-            _objects3D.Add(new Diamond(_currentCamera, new CustomVector(new double[] { 30, -15, 7 }), 1));
+            _objects3D.Add(new Diamond(_currentCamera, new CustomVector(new double[] { 7, -15, 30, 1 }), 5));
             _objectsState.Add(true);
         }
 
@@ -70,6 +72,16 @@ namespace Project4
             mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
             BaseGraphicObject.Bitmap = (Bitmap)mainPictureBox.Image;
             BaseGraphicObject.Graphics = Graphics.FromImage(mainPictureBox.Image);
+            BaseGraphicObject.ScreenWidth = BaseGraphicObject.Bitmap.Width;
+            BaseGraphicObject.ScreenHeight = BaseGraphicObject.Bitmap.Height;
+            BaseGraphicObject.ZBuffor = new double[BaseGraphicObject.ScreenWidth + 1, BaseGraphicObject.ScreenHeight];
+            for (int i = 0; i <= BaseGraphicObject.ScreenWidth; i++)
+            {
+                for (int j = 0; j < BaseGraphicObject.ScreenHeight; j++)
+                {
+                    BaseGraphicObject.ZBuffor[i, j] = int.MaxValue; 
+                }
+            }
         }
 
         private void DrawAllShapes()
@@ -89,18 +101,18 @@ namespace Project4
         private void MoveObjects()
         {
             CustomVector vector;
-            var diamond = _objects3D[0];
-            if (diamond.points[0][0] >= 80)
+            var figure = _objects3D[0];
+            if (figure.points[0][2] >= 80)
                 _objectsState[0] = false;
-            else if (diamond.points[0][0] <= 20)
+            else if (figure.points[0][2] <= 20)
                 _objectsState[0] = true;
-
+        
             if (_objectsState[0])
-                vector = new CustomVector(new double[] { 0.1, 0, 0 });
+                vector = new CustomVector(new double[] { 0, 0, 0.1 });
             else
-                vector = new CustomVector(new double[] { -0.1, 0, 0 });
-            diamond.Translation(vector);
-            diamond.RotateX(0.01);
+                vector = new CustomVector(new double[] { 0, 0, -0.1 });
+            figure.Translation(vector);
+            figure.RotateZ(0.01);
         }
 
         private void MoveCamera()
@@ -143,7 +155,8 @@ namespace Project4
             _currentCamera = _camera3;
 
             var diamond = _objects3D[0];
-            _camera3.ChangeTarget(diamond.center);
+            var center = new CustomVector(new double[] { diamond.center[0], diamond.center[1], diamond.center[2] });
+            _camera3.ChangeTarget(center);
             SetNewCamera(_camera3);
         }
 
